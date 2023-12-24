@@ -1,0 +1,18 @@
+# Dockerfile.grpc
+FROM golang:latest
+
+WORKDIR /app
+COPY . .
+
+# Устанавливаем зависимости
+RUN go get -d -v ./...
+RUN go install -v ./...
+
+# Собираем gRPC-сервер
+RUN go build -o geo-service ./cmd/api
+
+# Экспозируем порт для gRPC
+EXPOSE 50051
+
+# Запускаем gRPC-сервер при старте контейнера
+CMD ["./geo-service"]
